@@ -1,58 +1,66 @@
 import React, { useState } from 'react';
+import { EmailRule } from './EmailRule';
+import { PasswordRule } from './PasswordRule';
 import {RequiredRule} from './RequiredRule'
 
 const Form =()=>{
-    const [email , setEmail] = useState<string>('')
-    const [password , setPassword] = useState<string>('')
+    const [data , setData] = useState<any> ({}) 
+    const rules: {}[] = [{ 'email':[RequiredRule , EmailRule] , 'password':[RequiredRule , PasswordRule]}]
+    const [errors , setErrors] = useState<string[]>([])
 
-    const data:any = {"email":' ' , 'password':'123456'} 
-    const rules: {}[] = [{ 'email':[RequiredRule] , 'password':[RequiredRule]}]
-    const [msg , setMessage] = useState<any>(null)
-    // const passess = (field:any , value:any)=>{
-    //       return !value.match(/^\S+$/)
-    // }
+    const errorss: any= []
 
-    // const message = (field:any)=>{
-    //     return field + " "+ 'is required'
-    // }
+    const handleInputChange = (e:any)=>{
+        setData({
+            ...data,
+            [e.target.name]:e.target.value,
+        })
+     }
 
     const validate = ()=>{
             rules.forEach(rule => {
                 for (const [key , value] of Object.entries(rule)) {
                      validateRule(key , value)
                 }    
-            });
+            }); 
     }
 
+
     const validateRule = (field:string , rule:any)=>{ 
-        console.log(rule , 'rule');
-        
-        getFieldValue(field)  
+        rule.forEach((ruleFunc:any) => {      
+            console.log(ruleFunc(field , getFieldValue(field))); 
+            // errorss.push({
+            //     field: ruleFunc(field , getFieldValue(field))
+            // })
+            // console.log(errorss , 'errorss');
+
+            return ruleFunc(field , getFieldValue(field))
+        });    
     }
 
     const getFieldValue = (field:string)=>{
-       return data[field] ? data[field] : null
+       return data && data[field] ? data[field] : null
      }
 
     const validator=(data:{}[] , rules:{}[], validate:any)=>{
-         console.log('data' , data);
-         console.log('rules' , rules);
-         console.log('validate' , validate);
-
-
+        //  console.log('data' , data);
+        //  console.log('rules' , rules);
+        //  console.log('validate' , validate);
+        // setErrors(errorss)
+        // return errorss
     }
     
-    // const handleLogin=()=>{
-    // //   validator()
-    // }
 
+
+
+   
     validator(data , rules , validate())
     return(
         <> 
           <form>
               <h1>Login Form...</h1>
-            <input name='email' type="text" placeholder='email' value={email} onChange={(e)=>setEmail(e.target.value)}/>
-            <input name='password' type="text" placeholder='password'value={password} onChange={(e)=>setPassword(e.target.value)}/>
+            <input name='email' type="text" placeholder='email' value={data.email} onChange={handleInputChange}/>
+            <input name='password' type="text" placeholder='password'value={data.password} onChange={handleInputChange}/>
             <button type='submit'>Submit</button>
           </form>
         </>
