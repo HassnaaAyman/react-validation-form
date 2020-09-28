@@ -1,9 +1,12 @@
 export const EmailRule = (field:string , value:any)=>{
-    const filter = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/
-    if(!filter.test(value)){
+  
+    const passess = ()=>{
+        const filter = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/
+        return filter.test(value)
+    }
+    const message = ()=>{
         return `should be valid ${field} address`
     }
-    else{
-        return value
-    }
+
+    return {passess , message}    
 }

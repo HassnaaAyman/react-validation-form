@@ -1,8 +1,12 @@
 export const PasswordRule = (field:string , value:any)=>{
-    if(value && value.length >= 8 ){
-        return value
+    const passess=()=>{
+        return value.length >= 8;
     }
-    else{
+
+    const message = ()=>{
         return `${field} should be more the 8 charactres`
+
     }
+
+    return {passess , message}
 }

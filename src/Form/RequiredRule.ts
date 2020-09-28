@@ -1,12 +1,11 @@
-export const RequiredRule = (field:string , value:any)=>{ 
-    if(!value){
-        return field + " "+ 'is required'
+export const RequiredRule = (field: any, value: string)=>{ 
+    const passess = ()=>{
+        return !!value
     }
-    else{
-        return value
-    }
-}
 
-export const MessageRequiredRule =(field:string)=>{
-    return field + " "+ 'is required'
+    const message = ()=>{
+            return field + " "+ 'is required'
+    }
+
+    return {passess , message}
 }
